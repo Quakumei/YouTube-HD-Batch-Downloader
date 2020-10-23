@@ -13,7 +13,10 @@ def getExt(k):
     return "".join(res)[::-1]
     
 def downloadAudioVideo(url):
-    streams = YouTube(url).streams
+    try:
+    	streams = YouTube(url).streams
+    except:
+    	return downloadAudioVideo(url)
     video = streams.filter(progressive=False).order_by('resolution').desc().first().download()
     audio = streams.get_audio_only().download()
     
@@ -57,4 +60,3 @@ parser.add_argument('--list', type=str,  help='schindlers_list file')
 args = parser.parse_args()
 
 process_batch(args.list)
-
